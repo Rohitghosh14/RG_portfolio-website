@@ -94,17 +94,11 @@ export default function CommitGraph() {
                           <stop offset="100%" stopColor="#2E8B57" stopOpacity="0" />
                         </linearGradient>
                       </defs>
-                      <motion.path 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1, delay: 0.2 }}
+                      <path 
                         d={fillD} 
                         fill="url(#commitGraphGradient)" 
                       />
-                      <motion.path 
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                      <path 
                         d={pathD} 
                         fill="none" 
                         stroke="#2E8B57" 
