@@ -82,7 +82,7 @@ export default function BioCard() {
               </div>
               
               {/* Right: Commit Graph */}
-              <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col h-[280px]">
+              <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col h-full min-h-[280px]">
                 <CommitGraph />
               </div>
             </div>

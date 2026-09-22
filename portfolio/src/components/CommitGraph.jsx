@@ -103,17 +103,14 @@ export default function CommitGraph() {
                         fill="none" 
                         stroke="#2E8B57" 
                         strokeWidth="2" 
-                        vectorEffect="non-scaling-stroke" 
+                        vectorEffect="non-scaling-stroke"
                       />
                     </svg>
 
                     {/* Data points */}
                     {points.map((p, i) => (
-                      <motion.div
+                      <div
                         key={i}
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.4, delay: 0.8 + (i * 0.02) }}
                         className="absolute w-2 h-2 -ml-1 -mt-1 bg-panel border-[1.5px] rounded-full z-10 hover:scale-150 transition-transform cursor-pointer"
                         style={{ left: `${p.x}%`, top: `${p.y}%`, borderColor: '#2E8B57' }}
                         title={`${p.count} commits on ${p.date}`}
