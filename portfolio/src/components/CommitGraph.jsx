@@ -58,14 +58,14 @@ export default function CommitGraph() {
               </div>
             </div>
             
-            <div className="relative w-full h-[140px] mt-4" style={{ color: '#2E8B57' }}>
+            <div className="relative w-full flex-1 min-h-[100px] mt-4" style={{ color: '#2E8B57' }}>
               {(() => {
                 const maxCount = Math.max(...data.dailyData.map(d => d.count), 1);
                 
                 // Generate points in 0-100 percentage space
                 const points = data.dailyData.map((day, i) => ({
                   x: (i / Math.max(data.dailyData.length - 1, 1)) * 100,
-                  y: 95 - (day.count / maxCount) * 85, // Scales between 10% and 95% from top
+                  y: 90 - (day.count / maxCount) * 80, // Scales between 10% and 90% from top
                   count: day.count,
                   date: day.date
                 }));
