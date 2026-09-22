@@ -30,23 +30,23 @@ export default function CommitGraph() {
   }, [])
 
   return (
-    <div className="w-full h-full flex flex-col justify-between">
+    <div className="w-full flex flex-col">
       <div>
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-6">
           <SiGithub className="text-xl opacity-80" />
           <h4 className="font-mono text-xs uppercase tracking-widest text-muted">GitHub Activity (30 Days)</h4>
         </div>
 
         {loading ? (
-          <div className="h-[160px] flex items-center justify-center">
+          <div className="h-[120px] flex items-center justify-center">
             <div className="w-5 h-5 rounded-full border-2 border-accent border-t-transparent animate-spin" />
           </div>
         ) : error ? (
-          <div className="h-[160px] flex items-center justify-center">
+          <div className="h-[120px] flex items-center justify-center">
             <p className="text-xs text-body/50 font-mono">Data unavailable pending deployment</p>
           </div>
         ) : data ? (
-          <div className="flex flex-col gap-8 h-full justify-between">
+          <div className="flex flex-col gap-6">
             <div className="flex gap-10">
               <div>
                 <p className="text-4xl sm:text-5xl font-bold text-heading tracking-tight">{data.totalCommits}</p>
@@ -58,7 +58,7 @@ export default function CommitGraph() {
               </div>
             </div>
             
-            <div className="relative w-full flex-1 min-h-[100px] mt-4" style={{ color: '#2E8B57' }}>
+            <div className="relative w-full h-[100px] mt-2" style={{ color: '#2E8B57' }}>
               {(() => {
                 const maxCount = Math.max(...data.dailyData.map(d => d.count), 1);
                 

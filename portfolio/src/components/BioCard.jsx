@@ -72,9 +72,9 @@ export default function BioCard() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
               {/* Left: Social Links */}
-              <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col justify-center gap-6">
+              <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col gap-6">
                 <h4 className="font-mono text-xs uppercase tracking-widest text-muted">Connect</h4>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 mt-2">
                   <SocialLink icon={FaGithub} label="GitHub" href="https://github.com/Rohitghosh14" />
                   <SocialLink icon={FaKaggle} label="Kaggle" href="https://www.kaggle.com/rohitghosh14" />
                   <SocialLink icon={FaLinkedin} label="LinkedIn" href="https://www.linkedin.com/in/rohit-ghosh14" />
@@ -82,7 +82,7 @@ export default function BioCard() {
               </div>
               
               {/* Right: Commit Graph */}
-              <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col h-full min-h-[280px]">
+              <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col gap-6">
                 <CommitGraph />
               </div>
             </div>
