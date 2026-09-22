@@ -54,10 +54,10 @@ function TimelineCard({ index, title, subtitle, description, link, date }) {
   return (
     <motion.div
       ref={ref}
-      variants={{
-        hidden: { opacity: 0, y: 10 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
-      }}
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       className="flex gap-4 sm:gap-6 bg-panel border border-white/10 rounded-2xl p-6 sm:p-8"
     >
       {/* Number */}
