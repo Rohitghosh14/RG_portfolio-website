@@ -111,6 +111,11 @@ export default function Certifications() {
     }
   }
 
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+  }
+
   return (
     <motion.section 
       id="certifications"
@@ -179,16 +184,38 @@ export default function Certifications() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col gap-6"
+            className="space-y-0"
           >
             {[...certifications, ...additionalCredentials].map((cert, i) => (
-              <TimelineCard 
+              <motion.div
                 key={i}
-                index={i}
-                title={cert.name}
-                link={cert.verifyUrl}
-              />
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-5 border-t border-white/10"
+              >
+                <span className="text-heading text-sm sm:text-base">
+                  {cert.name}
+                </span>
+                {cert.verifyUrl && (
+                  <a
+                    href={cert.verifyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 text-body text-sm font-semibold hover:text-accent-hover transition-colors mt-2 sm:mt-0 whitespace-nowrap"
+                  >
+                    <span className="relative inline-block">
+                      Verify
+                      <span className="absolute left-0 bottom-0 w-full h-[1px] bg-accent-hover scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out" />
+                    </span>
+                    <span className="transform transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+                      ↗
+                    </span>
+                  </a>
+                )}
+              </motion.div>
             ))}
+            <div className="border-t border-white/10" />
           </motion.div>
         )}
 
