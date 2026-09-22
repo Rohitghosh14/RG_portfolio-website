@@ -66,12 +66,19 @@ export default function Contact() {
       {/* Footer */}
       <footer className="max-w-6xl mx-auto px-6 py-8 border-t border-white/10">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-            <span className="text-body text-xs">
-              Rohit · AI/ML Engineer · Kolkata, India
-            </span>
-            <span className="text-body text-xs">
-              Built with React, Tailwind &amp; Framer Motion · © 2026
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <span className="text-body text-xs">
+                Rohit • AI/ML Engineer • Kolkata, India
+              </span>
+              <span className="text-body text-xs">
+                Built with React, Tailwind &amp; Framer Motion • © 2026
+              </span>
+            </div>
+            <span className="text-muted text-[10px] mt-1 sm:mt-0">
+              <a href="https://www.flaticon.com/free-icons/cursor" title="cursor icons" target="_blank" rel="noopener noreferrer" className="hover:text-body transition-colors">
+                Cursor icon by meaicon — Flaticon
+              </a>
             </span>
           </div>
           {/* Small monochrome QR code → GitHub */}

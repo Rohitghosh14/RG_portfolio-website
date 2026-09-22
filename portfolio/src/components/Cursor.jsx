@@ -35,7 +35,9 @@ export default function Cursor() {
       
       // Calculate rotation if moved enough
       if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
-        const angle = Math.atan2(dy, dx) * (180 / Math.PI)
+        // Standard cursor PNGs point top-left (-135deg). 
+        // We add 135 to make 0 rotation point right, matching atan2.
+        const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 135
         
         // Prevent 360 spin by finding shortest angular path
         let currentRotation = cursorRotation.get()
@@ -91,19 +93,12 @@ export default function Cursor() {
           isPointer ? 'scale-125' : 'scale-100'
         }`}
       >
-        <svg 
-          width="16" 
-          height="16" 
-          viewBox="0 0 16 16" 
-          className="drop-shadow-md overflow-visible"
-        >
-          <polygon 
-            points="16,8 0,0 0,16" 
-            className="fill-accent stroke-white/80" 
-            strokeWidth="1.5" 
-            strokeLinejoin="round"
-          />
-        </svg>
+        <img 
+          src="/assets/cursor-pointer.png"
+          alt=""
+          className="drop-shadow-md w-[18px] h-[18px]"
+          style={{ imageRendering: '-webkit-optimize-contrast' }}
+        />
       </motion.div>
     </motion.div>
   )
