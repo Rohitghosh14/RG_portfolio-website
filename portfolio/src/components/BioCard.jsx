@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaGithub, FaKaggle, FaLinkedin } from 'react-icons/fa6'
+import { FaGithub, FaKaggle, FaLinkedin, FaChevronDown } from 'react-icons/fa6'
 import CommitGraph from './CommitGraph'
 
 export default function BioCard() {
   const [imgError, setImgError] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   return (
     <div className="mb-16">
@@ -44,23 +45,50 @@ export default function BioCard() {
         </div>
       </div>
 
-      {/* Part B: Split Card */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left: Social Links */}
-        <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col justify-center gap-6">
-          <h4 className="font-mono text-xs uppercase tracking-widest text-muted">Connect</h4>
-          <div className="flex flex-col gap-4">
-            <SocialLink icon={FaGithub} label="GitHub" href="https://github.com/Rohitghosh14" />
-            <SocialLink icon={FaKaggle} label="Kaggle" href="https://www.kaggle.com/rohitghosh14" />
-            <SocialLink icon={FaLinkedin} label="LinkedIn" href="https://www.linkedin.com/in/rohit-ghosh14" />
-          </div>
-        </div>
-        
-        {/* Right: Commit Graph */}
-        <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col h-full">
-          <CommitGraph />
-        </div>
+      {/* Swipe-down disclosure control */}
+      <div className="flex justify-center -mt-10 mb-6 relative z-10">
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center gap-2 px-5 py-2 rounded-full bg-bg border border-white/10 hover:border-white/20 transition-all shadow-md group cursor-pointer"
+        >
+          <span className="text-xs font-mono font-semibold text-body group-hover:text-heading transition-colors">
+            {isExpanded ? 'LESS' : 'MORE'}
+          </span>
+          <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.3, ease: 'easeOut' }}>
+            <FaChevronDown className="text-body group-hover:text-heading transition-colors" />
+          </motion.div>
+        </button>
       </div>
+
+      {/* Part B: Split Card */}
+      <AnimatePresence initial={false}>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+              {/* Left: Social Links */}
+              <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col justify-center gap-6">
+                <h4 className="font-mono text-xs uppercase tracking-widest text-muted">Connect</h4>
+                <div className="flex flex-col gap-4">
+                  <SocialLink icon={FaGithub} label="GitHub" href="https://github.com/Rohitghosh14" />
+                  <SocialLink icon={FaKaggle} label="Kaggle" href="https://www.kaggle.com/rohitghosh14" />
+                  <SocialLink icon={FaLinkedin} label="LinkedIn" href="https://www.linkedin.com/in/rohit-ghosh14" />
+                </div>
+              </div>
+              
+              {/* Right: Commit Graph */}
+              <div className="border border-white/10 rounded-2xl bg-panel p-6 sm:p-8 flex flex-col h-[280px]">
+                <CommitGraph />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

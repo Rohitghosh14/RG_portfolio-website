@@ -58,23 +58,75 @@ export default function CommitGraph() {
               </div>
             </div>
             
-            <div className="flex items-end gap-1.5 h-[120px] mt-4">
-              {data.dailyData.map((day, i) => {
-                // Normalize height relative to the max count in the 30 days
-                const maxCount = Math.max(...data.dailyData.map(d => d.count), 1)
-                const heightPercentage = Math.max((day.count / maxCount) * 100, 4) // minimum 4% height so 0 isn't invisible
+            <div className="relative w-full h-[140px] mt-4 text-accent">
+              {(() => {
+                const maxCount = Math.max(...data.dailyData.map(d => d.count), 1);
                 
+                // Generate points in 0-100 percentage space
+                const points = data.dailyData.map((day, i) => ({
+                  x: (i / (data.dailyData.length - 1)) * 100,
+                  y: 95 - (day.count / maxCount) * 85, // Scales between 10% and 95% from top
+                  count: day.count,
+                  date: day.date
+                }));
+
+                // Create smooth cubic bezier path
+                let pathD = `M ${points[0].x},${points[0].y}`;
+                for (let i = 0; i < points.length - 1; i++) {
+                  const p0 = points[i];
+                  const p1 = points[i + 1];
+                  const cx = (p0.x + p1.x) / 2;
+                  pathD += ` C ${cx},${p0.y} ${cx},${p1.y} ${p1.x},${p1.y}`;
+                }
+                const fillD = `${pathD} L 100,100 L 0,100 Z`;
+
                 return (
-                  <motion.div
-                    key={day.date}
-                    initial={{ height: 0 }}
-                    animate={{ height: `${heightPercentage}%` }}
-                    transition={{ duration: 0.5, delay: i * 0.015, ease: "easeOut" }}
-                    className={`flex-1 rounded-t-[2px] ${day.count > 0 ? 'bg-accent' : 'bg-white/10 dark:bg-white/10 bg-black/5'}`}
-                    title={`${day.count} commits on ${day.date}`}
-                  />
-                )
-              })}
+                  <>
+                    <svg 
+                      className="absolute inset-0 w-full h-full overflow-visible" 
+                      viewBox="0 0 100 100" 
+                      preserveAspectRatio="none"
+                    >
+                      <defs>
+                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="currentColor" stopOpacity="0.25" />
+                          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+                        </linearGradient>
+                      </defs>
+                      <motion.path 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 1, delay: 0.2 }}
+                        d={fillD} 
+                        fill="url(#chartGradient)" 
+                      />
+                      <motion.path 
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                        d={pathD} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        vectorEffect="non-scaling-stroke" 
+                      />
+                    </svg>
+
+                    {/* Data points */}
+                    {points.map((p, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.4, delay: 0.8 + (i * 0.02) }}
+                        className="absolute w-2 h-2 -ml-1 -mt-1 bg-panel border-[1.5px] border-current rounded-full z-10 hover:scale-150 transition-transform cursor-pointer"
+                        style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                        title={`${p.count} commits on ${p.date}`}
+                      />
+                    ))}
+                  </>
+                );
+              })()}
             </div>
           </div>
         ) : null}

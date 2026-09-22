@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 
 export default function Cursor() {
@@ -8,11 +8,15 @@ export default function Cursor() {
 
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
+  const cursorRotation = useMotionValue(0)
   
   // Spring physics for smooth but snappy follow
   const springConfig = { damping: 25, stiffness: 600, mass: 0.1 }
   const cursorXSpring = useSpring(cursorX, springConfig)
   const cursorYSpring = useSpring(cursorY, springConfig)
+  const cursorRotationSpring = useSpring(cursorRotation, { damping: 25, stiffness: 400 })
+
+  const lastPos = useRef({ x: -100, y: -100 })
 
   useEffect(() => {
     // Check if device is touch based
@@ -22,8 +26,28 @@ export default function Cursor() {
     }
 
     const moveCursor = (e) => {
+      const dx = e.clientX - lastPos.current.x
+      const dy = e.clientY - lastPos.current.y
+      
+      // Update position
       cursorX.set(e.clientX)
       cursorY.set(e.clientY)
+      
+      // Calculate rotation if moved enough
+      if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+        const angle = Math.atan2(dy, dx) * (180 / Math.PI)
+        
+        // Prevent 360 spin by finding shortest angular path
+        let currentRotation = cursorRotation.get()
+        let diff = angle - (currentRotation % 360)
+        if (diff > 180) diff -= 360
+        if (diff < -180) diff += 360
+        
+        cursorRotation.set(currentRotation + diff)
+      }
+
+      lastPos.current = { x: e.clientX, y: e.clientY }
+      
       if (!isVisible) setIsVisible(true)
 
       // Determine if hovered element is clickable
@@ -48,7 +72,7 @@ export default function Cursor() {
       document.removeEventListener('mouseleave', handleMouseLeave)
       document.removeEventListener('mouseenter', handleMouseEnter)
     }
-  }, [cursorX, cursorY, isVisible])
+  }, [cursorX, cursorY, cursorRotation, isVisible])
 
   if (isTouch) return null
 
@@ -61,8 +85,9 @@ export default function Cursor() {
         opacity: isVisible ? 1 : 0
       }}
     >
-      <div 
-        className={`relative -translate-x-[40%] -translate-y-[40%] flex items-center justify-center transition-all duration-200 ease-out ${
+      <motion.div 
+        style={{ rotate: cursorRotationSpring }}
+        className={`relative -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-200 ease-out ${
           isPointer ? 'scale-125 text-accent-hover' : 'scale-100 text-accent'
         }`}
       >
@@ -75,11 +100,10 @@ export default function Cursor() {
           strokeWidth="3" 
           strokeLinecap="round" 
           strokeLinejoin="round" 
-          style={{ transform: 'rotate(-45deg)' }}
         >
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
