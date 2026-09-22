@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaGithub, FaKaggle, FaLinkedin } from 'react-icons/fa6'
+import CommitGraph from './CommitGraph'
 
 export default function BioCard() {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -53,29 +54,34 @@ export default function BioCard() {
                 </div>
 
                 {/* Photo / Contact Card slot */}
-                <div className="hidden lg:flex flex-col w-full bg-white/[0.02] border border-white/5 rounded-xl overflow-hidden backdrop-blur-sm">
-                  {/* Photo area */}
-                  <div className="relative w-full aspect-square bg-white/[0.02] flex items-center justify-center overflow-hidden">
-                    {!imgError ? (
-                      <img 
-                        src="/assets/rohit-photo.jpg" 
-                        alt="Rohit Ghosh" 
-                        className="absolute inset-0 w-full h-full object-cover"
-                        onError={() => setImgError(true)}
-                      />
-                    ) : (
-                      <span className="font-mono text-xs text-muted relative z-10">[PHOTO PENDING]</span>
-                    )}
-                    {/* Inner gradient overlay for smooth transition to links below */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-panel via-transparent to-transparent opacity-50" />
+                <div className="hidden lg:flex flex-col w-full gap-4">
+                  <div className="flex flex-col w-full bg-white/[0.02] border border-white/5 rounded-xl overflow-hidden backdrop-blur-sm">
+                    {/* Photo area */}
+                    <div className="relative w-full aspect-square bg-white/[0.02] flex items-center justify-center overflow-hidden">
+                      {!imgError ? (
+                        <img 
+                          src="/assets/rohit-photo.jpg" 
+                          alt="Rohit Ghosh" 
+                          className="absolute inset-0 w-full h-full object-cover"
+                          onError={() => setImgError(true)}
+                        />
+                      ) : (
+                        <span className="font-mono text-xs text-muted relative z-10">[PHOTO PENDING]</span>
+                      )}
+                      {/* Inner gradient overlay for smooth transition to links below */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-panel via-transparent to-transparent opacity-50" />
+                    </div>
+                    
+                    {/* Links Area */}
+                    <div className="p-4 flex flex-col gap-2 relative z-10 bg-panel border-t border-white/5">
+                      <SocialLink icon={FaGithub} label="GitHub" href="https://github.com/Rohitghosh14" />
+                      <SocialLink icon={FaKaggle} label="Kaggle" href="https://www.kaggle.com/rohitghosh14" />
+                      <SocialLink icon={FaLinkedin} label="LinkedIn" href="https://www.linkedin.com/in/rohit-ghosh14" />
+                    </div>
                   </div>
                   
-                  {/* Links Area */}
-                  <div className="p-4 flex flex-col gap-2 relative z-10 bg-panel border-t border-white/5">
-                    <SocialLink icon={FaGithub} label="GitHub" href="https://github.com/Rohitghosh14" />
-                    <SocialLink icon={FaKaggle} label="Kaggle" href="https://www.kaggle.com/rohitghosh14" />
-                    <SocialLink icon={FaLinkedin} label="LinkedIn" href="https://www.linkedin.com/in/rohit-ghosh14" />
-                  </div>
+                  {/* GitHub Commit Graph */}
+                  <CommitGraph />
                 </div>
               </div>
             </div>
