@@ -58,13 +58,13 @@ export default function CommitGraph() {
               </div>
             </div>
             
-            <div className="relative w-full h-[140px] mt-4 text-accent">
+            <div className="relative w-full h-[140px] mt-4" style={{ color: '#2E8B57' }}>
               {(() => {
                 const maxCount = Math.max(...data.dailyData.map(d => d.count), 1);
                 
                 // Generate points in 0-100 percentage space
                 const points = data.dailyData.map((day, i) => ({
-                  x: (i / (data.dailyData.length - 1)) * 100,
+                  x: (i / Math.max(data.dailyData.length - 1, 1)) * 100,
                   y: 95 - (day.count / maxCount) * 85, // Scales between 10% and 95% from top
                   count: day.count,
                   date: day.date
@@ -86,11 +86,12 @@ export default function CommitGraph() {
                       className="absolute inset-0 w-full h-full overflow-visible" 
                       viewBox="0 0 100 100" 
                       preserveAspectRatio="none"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
                       <defs>
-                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="currentColor" stopOpacity="0.25" />
-                          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+                        <linearGradient id="commitGraphGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#2E8B57" stopOpacity="0.3" />
+                          <stop offset="100%" stopColor="#2E8B57" stopOpacity="0" />
                         </linearGradient>
                       </defs>
                       <motion.path 
@@ -98,7 +99,7 @@ export default function CommitGraph() {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1, delay: 0.2 }}
                         d={fillD} 
-                        fill="url(#chartGradient)" 
+                        fill="url(#commitGraphGradient)" 
                       />
                       <motion.path 
                         initial={{ pathLength: 0 }}
@@ -106,7 +107,7 @@ export default function CommitGraph() {
                         transition={{ duration: 1.5, ease: "easeInOut" }}
                         d={pathD} 
                         fill="none" 
-                        stroke="currentColor" 
+                        stroke="#2E8B57" 
                         strokeWidth="2" 
                         vectorEffect="non-scaling-stroke" 
                       />
@@ -119,8 +120,8 @@ export default function CommitGraph() {
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.4, delay: 0.8 + (i * 0.02) }}
-                        className="absolute w-2 h-2 -ml-1 -mt-1 bg-panel border-[1.5px] border-current rounded-full z-10 hover:scale-150 transition-transform cursor-pointer"
-                        style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                        className="absolute w-2 h-2 -ml-1 -mt-1 bg-panel border-[1.5px] rounded-full z-10 hover:scale-150 transition-transform cursor-pointer"
+                        style={{ left: `${p.x}%`, top: `${p.y}%`, borderColor: '#2E8B57' }}
                         title={`${p.count} commits on ${p.date}`}
                       />
                     ))}

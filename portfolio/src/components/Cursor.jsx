@@ -88,20 +88,17 @@ export default function Cursor() {
       <motion.div 
         style={{ rotate: cursorRotationSpring }}
         className={`relative -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-200 ease-out ${
-          isPointer ? 'scale-125 text-accent-hover' : 'scale-100 text-accent'
+          isPointer ? 'scale-125' : 'scale-100'
         }`}
       >
         <svg 
           width="20" 
           height="20" 
           viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="3" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
+          fill="var(--color-accent, #4ade80)" 
+          className="drop-shadow-md"
         >
-          <path d="M5 12h14M12 5l7 7-7 7"/>
+          <polygon points="22,12 2,2 7,12 2,22" />
         </svg>
       </motion.div>
     </motion.div>
