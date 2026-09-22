@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useRef } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import SectionLabel from './SectionLabel'
 import experienceData from '../data/experience'
 
@@ -45,6 +45,61 @@ const additionalCredentials = [
   },
 ]
 
+function TimelineCard({ index, title, subtitle, description, link, date }) {
+  const ref = useRef(null)
+  // Trigger when card crosses the vertical center of the screen
+  const isInView = useInView(ref, { margin: "-40% 0px -40% 0px" })
+  const numStr = (index + 1).toString().padStart(2, '0')
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={{
+        hidden: { opacity: 0, y: 10 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+      }}
+      className="flex gap-4 sm:gap-6 bg-panel border border-white/10 rounded-2xl p-6 sm:p-8"
+    >
+      {/* Number */}
+      <div className="flex-shrink-0 flex items-start">
+        <span className="font-mono text-3xl sm:text-4xl font-bold text-muted opacity-50">{numStr}</span>
+      </div>
+      
+      {/* Vertical Accent Bar */}
+      <div 
+        className={`w-1 rounded-full transition-colors duration-500 flex-shrink-0 ${isInView ? 'bg-accent' : 'bg-white/10'}`} 
+      />
+      
+      {/* Content */}
+      <div className="flex-1 flex flex-col justify-center">
+        <h3 className="text-heading text-lg font-bold mb-1">{title}</h3>
+        {subtitle && <p className="text-accent text-xs sm:text-sm font-mono tracking-wider mb-2">{subtitle}</p>}
+        {date && <p className="text-muted text-xs font-mono mb-3">{date}</p>}
+        {description && <p className="text-body text-sm leading-relaxed">{description}</p>}
+        
+        {link && (
+          <div className="mt-4">
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 text-body text-sm font-semibold hover:text-accent-hover transition-colors whitespace-nowrap"
+            >
+              <span className="relative inline-block">
+                Verify
+                <span className="absolute left-0 bottom-0 w-full h-[1px] bg-accent-hover scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out" />
+              </span>
+              <span className="transform transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+                ↗
+              </span>
+            </a>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+
 export default function Certifications() {
   const [activeTab, setActiveTab] = useState('experience')
 
@@ -54,11 +109,6 @@ export default function Certifications() {
       opacity: 1,
       transition: { staggerChildren: 0.1 }
     }
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
   }
 
   return (
@@ -107,30 +157,18 @@ export default function Certifications() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="space-y-0"
+            className="flex flex-col gap-6"
           >
             {experienceData.map((exp, i) => (
-              <motion.div
+              <TimelineCard 
                 key={exp.id}
-                variants={itemVariants}
-                initial="hidden"
-                animate="visible"
-                className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-8 py-8 border-t border-white/10"
-              >
-                <div className="font-mono text-sm text-muted">
-                  {exp.date}
-                </div>
-                <div>
-                  <h3 className="text-heading text-lg font-bold mb-1">
-                    {exp.role} <span className="text-muted font-normal">— {exp.company}</span>
-                  </h3>
-                  <p className="text-body text-sm leading-relaxed max-w-2xl mt-3">
-                    {exp.description}
-                  </p>
-                </div>
-              </motion.div>
+                index={i}
+                title={exp.role}
+                subtitle={exp.company}
+                date={exp.date}
+                description={exp.description}
+              />
             ))}
-            <div className="border-t border-white/10" />
           </motion.div>
         )}
 
@@ -141,38 +179,16 @@ export default function Certifications() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="space-y-0"
+            className="flex flex-col gap-6"
           >
             {[...certifications, ...additionalCredentials].map((cert, i) => (
-              <motion.div
+              <TimelineCard 
                 key={i}
-                variants={itemVariants}
-                initial="hidden"
-                animate="visible"
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-5 border-t border-white/10"
-              >
-                <span className="text-heading text-sm sm:text-base">
-                  {cert.name}
-                </span>
-                {cert.verifyUrl && (
-                  <a
-                    href={cert.verifyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 text-body text-sm font-semibold hover:text-accent-hover transition-colors mt-2 sm:mt-0 whitespace-nowrap"
-                  >
-                    <span className="relative inline-block">
-                      Verify
-                      <span className="absolute left-0 bottom-0 w-full h-[1px] bg-accent-hover scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out" />
-                    </span>
-                    <span className="transform transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-                      ↗
-                    </span>
-                  </a>
-                )}
-              </motion.div>
+                index={i}
+                title={cert.name}
+                link={cert.verifyUrl}
+              />
             ))}
-            <div className="border-t border-white/10" />
           </motion.div>
         )}
 
@@ -183,7 +199,7 @@ export default function Certifications() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="py-12 border-t border-white/10"
+            className="py-12 border border-white/10 rounded-2xl bg-panel"
           >
             <p className="font-mono text-sm text-muted text-center">Achievements coming soon.</p>
           </motion.div>

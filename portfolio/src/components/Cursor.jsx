@@ -92,13 +92,17 @@ export default function Cursor() {
         }`}
       >
         <svg 
-          width="20" 
-          height="20" 
-          viewBox="0 0 24 24" 
-          fill="var(--color-accent, #4ade80)" 
-          className="drop-shadow-md"
+          width="16" 
+          height="16" 
+          viewBox="0 0 16 16" 
+          className="drop-shadow-md overflow-visible"
         >
-          <polygon points="22,12 2,2 7,12 2,22" />
+          <polygon 
+            points="16,8 0,0 0,16" 
+            className="fill-accent stroke-white/80" 
+            strokeWidth="1.5" 
+            strokeLinejoin="round"
+          />
         </svg>
       </motion.div>
     </motion.div>
