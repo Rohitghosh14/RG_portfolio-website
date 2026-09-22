@@ -10,8 +10,8 @@ export default function BioCard() {
   return (
     <div className="mb-16">
       {/* Part A: Showcase Card */}
-      <div className="flex flex-col sm:flex-row gap-8 p-6 sm:p-8 border border-white/10 rounded-2xl bg-panel overflow-hidden mb-6">
-        <div className="w-full sm:w-1/3 aspect-[4/5] sm:h-auto rounded-xl overflow-hidden relative flex-shrink-0">
+      <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 p-6 sm:p-10 border border-white/10 rounded-2xl bg-panel overflow-hidden mb-6">
+        <div className="w-full sm:w-1/3 aspect-[4/5] sm:min-h-[380px] rounded-xl overflow-hidden relative flex-shrink-0 shadow-lg">
           {!imgError ? (
             <img 
               src="/assets/rohit-photo.jpg" 
@@ -29,9 +29,9 @@ export default function BioCard() {
         </div>
         
         <div className="w-full sm:w-2/3 flex flex-col justify-center">
-          <h3 className="text-3xl sm:text-4xl font-semibold text-heading mb-2">Rohit Ghosh</h3>
-          <p className="text-accent text-sm font-mono tracking-wider mb-6">AI/ML Engineering Student</p>
-          <div className="space-y-4 text-body text-sm leading-relaxed">
+          <h3 className="text-4xl sm:text-5xl font-semibold text-heading mb-3 tracking-tight">Rohit Ghosh</h3>
+          <p className="text-accent text-sm sm:text-base font-mono tracking-wider mb-6">AI/ML Engineering Student</p>
+          <div className="space-y-4 text-body text-sm sm:text-base leading-relaxed">
             <p>
               Based in Kolkata, India, specializing in the intersection of mathematics and applied machine learning.
             </p>
@@ -49,13 +49,13 @@ export default function BioCard() {
       <div className="flex justify-center -mt-10 mb-6 relative z-10">
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 px-5 py-2 rounded-full bg-bg border border-white/10 hover:border-white/20 transition-all shadow-md group cursor-pointer"
+          className="flex items-center gap-2 px-6 py-2.5 rounded bg-heading border border-heading hover:opacity-90 transition-opacity shadow-md group cursor-pointer"
         >
-          <span className="text-xs font-mono font-semibold text-body group-hover:text-heading transition-colors">
+          <span className="text-xs font-mono font-bold text-bg transition-colors">
             {isExpanded ? 'LESS' : 'MORE'}
           </span>
           <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.3, ease: 'easeOut' }}>
-            <FaChevronDown className="text-body group-hover:text-heading transition-colors" />
+            <FaChevronDown className="text-bg transition-colors" />
           </motion.div>
         </button>
       </div>

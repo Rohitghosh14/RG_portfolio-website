@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { SiGithub } from 'react-icons/si'
 
 export default function CommitGraph() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [hoveredPoint, setHoveredPoint] = useState(null)
 
   useEffect(() => {
     async function fetchCommits() {
@@ -113,9 +114,35 @@ export default function CommitGraph() {
                         key={i}
                         className="absolute w-2 h-2 -ml-1 -mt-1 bg-panel border-[1.5px] rounded-full z-10 hover:scale-150 transition-transform cursor-pointer"
                         style={{ left: `${p.x}%`, top: `${p.y}%`, borderColor: '#2E8B57' }}
-                        title={`${p.count} commits on ${p.date}`}
+                        onMouseEnter={() => setHoveredPoint(p)}
+                        onMouseLeave={() => setHoveredPoint(null)}
                       />
                     ))}
+
+                    <AnimatePresence>
+                      {hoveredPoint && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.9, y: 10, x: '-50%' }}
+                          animate={{ opacity: 1, scale: 1, y: 0, x: '-50%' }}
+                          exit={{ opacity: 0, scale: 0.9, y: 10, x: '-50%' }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute z-20 flex flex-col items-center pointer-events-none"
+                          style={{
+                            left: `${hoveredPoint.x}%`,
+                            top: `calc(${hoveredPoint.y}% - 54px)`
+                          }}
+                        >
+                          <div className="bg-[#1A1A1A] border border-white/10 rounded-lg px-3 py-1.5 shadow-xl whitespace-nowrap flex flex-col items-center">
+                            <div className="text-[#2E8B57] font-bold text-sm leading-tight">{hoveredPoint.count} commits</div>
+                            <div className="text-white/50 text-[10px] font-mono uppercase tracking-wider">{new Date(hoveredPoint.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+                          </div>
+                          {/* Triangle pointer (Outer border) */}
+                          <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white/10 -mt-px relative" />
+                          {/* Triangle pointer (Inner fill) */}
+                          <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-[#1A1A1A] -mt-[6px] relative" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </>
                 );
               })()}
