@@ -9,8 +9,8 @@ export default function Cursor() {
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
   
-  // Spring physics for smooth follow-lag
-  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 }
+  // Spring physics for smooth but snappy follow
+  const springConfig = { damping: 25, stiffness: 600, mass: 0.1 }
   const cursorXSpring = useSpring(cursorX, springConfig)
   const cursorYSpring = useSpring(cursorY, springConfig)
 
@@ -62,11 +62,23 @@ export default function Cursor() {
       }}
     >
       <div 
-        className={`relative -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full transition-all duration-200 ease-out ${
-          isPointer ? 'w-8 h-8 border border-accent/50 bg-accent/5' : 'w-2 h-2 border border-transparent bg-transparent'
+        className={`relative -translate-x-[40%] -translate-y-[40%] flex items-center justify-center transition-all duration-200 ease-out ${
+          isPointer ? 'scale-125 text-accent-hover' : 'scale-100 text-accent'
         }`}
       >
-        <div className="rounded-full bg-accent w-1.5 h-1.5" />
+        <svg 
+          width="20" 
+          height="20" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="3" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          style={{ transform: 'rotate(-45deg)' }}
+        >
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
       </div>
     </motion.div>
   )
